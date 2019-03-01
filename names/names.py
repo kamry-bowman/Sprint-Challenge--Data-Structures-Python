@@ -1,36 +1,36 @@
 import time
 
 
-class BinarySearchTree:
-    def __init__(self, value=None):
-        self.value = value
-        self.left = None
-        self.right = None
+# class BinarySearchTree:
+#     def __init__(self, value=None):
+#         self.value = value
+#         self.left = None
+#         self.right = None
 
-    def insert(self, value):
-        if self.value == None:
-            self.value = value
-        else:
-            target = 'left' if value <= self.value else 'right'
-            target_val = getattr(self, target)
-            if target_val is None:
-                setattr(self, target, BinarySearchTree(value))
-            else:
-                target_val.insert(value)
+#     def insert(self, value):
+#         if self.value == None:
+#             self.value = value
+#         else:
+#             target = 'left' if value <= self.value else 'right'
+#             target_val = getattr(self, target)
+#             if target_val is None:
+#                 setattr(self, target, BinarySearchTree(value))
+#             else:
+#                 target_val.insert(value)
 
-    def contains(self, target):
-        if self.value == target:
-            return True
-        if target < self.value:
-            return self.left and self.left.contains(target)
-        else:
-            return self.right and self.right.contains(target)
+#     def contains(self, target):
+#         if self.value == target:
+#             return True
+#         if target < self.value:
+#             return self.left and self.left.contains(target)
+#         else:
+#             return self.right and self.right.contains(target)
 
-    def get_max(self):
-        if self.right is None:
-            return self.value
-        else:
-            return self.right.get_max()
+#     def get_max(self):
+#         if self.right is None:
+#             return self.value
+#         else:
+#             return self.right.get_max()
 
 
 start_time = time.time()
@@ -69,35 +69,49 @@ with open('names_1.txt', 'r') as f:
     for line in f.readlines():
         line = line.strip()
         start = 0
-        end = len(names)
-        mid = end // 2
+        end = len(names) - 1
         while start < end:
-            if names[mid] < line:
-                end = mid
-                mid = (start + mid) // 2
+            mid = (start + end) // 2
+            if names[mid] >= line:
+                end = mid - 1
             else:
-                start = mid
+                start = mid + 1
                 mid = (mid + end) // 2
-        names.insert(start, line)
+        if not names:
+            names.append(line)
+        if names[start] > line:
+            names.insert(start, line)
+        else:
+            names.insert(start + 1, line)
+
+s = sorted(names)
+for i in range(len(names)):
+    if names[i] != s[i]:
+        print(f'{names[i]} not equal to {s[i]}')
+        break
+
+print('sorted okay')
 
 with open('names_2.txt', 'r') as f:
     for line in f.readlines():
         line = line.strip()
         start = 0
-        end = len(names)
-        mid = end // 2
-        found = False
-        while not found and start < end:
+        end = len(names) - 1
+
+        while start < end:
+            mid = (start + end) // 2
             if names[mid] == line:
-                found = True
-                duplicates.append(names[mid])
+                duplicates.append(line)
+                break
+            if names[mid] >= line:
+                end = mid - 1
             else:
-                if names[mid] < line:
-                    end = mid
-                    mid = (start + mid) // 2
-                else:
-                    start = mid
-                    mid = (mid + end) // 2
+                start = mid + 1
+                mid = (mid + end) // 2
+
+        else:
+            if names[start] == line:
+                duplicates.append(line)
 
 
 end_time = time.time()
