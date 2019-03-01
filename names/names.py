@@ -49,17 +49,55 @@ start_time = time.time()
 #             duplicates.append(line)
 
 # dictionary version
-names = {}
+# names = {}
+# duplicates = []
+# with open('names_1.txt', 'r') as f:
+#     for line in f.readlines():
+#         names[(line.strip())] = 1
+
+# with open('names_2.txt', 'r') as f:
+#     for line in f.readlines():
+#         line = line.strip()
+#         if names.get(line) is not None:
+#             duplicates.append(line)
+
+
+# arrays only
+names = []
 duplicates = []
 with open('names_1.txt', 'r') as f:
     for line in f.readlines():
-        names[(line.strip())] = 1
+        line = line.strip()
+        start = 0
+        end = len(names)
+        mid = end // 2
+        while start < end:
+            if names[mid] < line:
+                end = mid
+                mid = (start + mid) // 2
+            else:
+                start = mid
+                mid = (mid + end) // 2
+        names.insert(start, line)
 
 with open('names_2.txt', 'r') as f:
     for line in f.readlines():
         line = line.strip()
-        if names.get(line) is not None:
-            duplicates.append(line)
+        start = 0
+        end = len(names)
+        mid = end // 2
+        found = False
+        while not found and start < end:
+            if names[mid] == line:
+                found = True
+                duplicates.append(names[mid])
+            else:
+                if names[mid] < line:
+                    end = mid
+                    mid = (start + mid) // 2
+                else:
+                    start = mid
+                    mid = (mid + end) // 2
 
 
 end_time = time.time()
