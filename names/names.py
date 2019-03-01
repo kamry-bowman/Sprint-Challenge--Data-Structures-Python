@@ -11,7 +11,7 @@ with open('names_1.txt', 'r') as f:
 with open('names_2.txt', 'r') as f:
     for line in f.readlines():
         if names.get(line) is not None:
-            duplicates.append(line)
+            duplicates.append(line.strip())
 
 
 end_time = time.time()
